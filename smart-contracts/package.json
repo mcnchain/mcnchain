@@ -1,0 +1,30 @@
+{
+  "name": "blockchain",
+  "version": "1.0.0",
+  "main": "hardhat.config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-etherscan": "^3.1.8",
+    "@openzeppelin/contracts": "^5.4.0",
+    "chai": "^5.2.1",
+    "dotenv": "^17.2.0",
+    "fs": "^0.0.1-security",
+    "mime": "^4.0.7",
+    "mocha": "^11.7.1",
+    "nft.storage": "^7.2.0",
+    "openai": "^5.10.2"
+  },
+  "devDependencies": {
+    "hardhat": "^2.26.1"
+  }
+}

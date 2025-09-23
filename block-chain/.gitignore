@@ -1,0 +1,47 @@
+# Директории нод (данные блокчейна)
+node1/geth/
+node1/keystore/
+node1/geth.ipc
+node1/transactions.rlp
+
+node2/geth/
+node2/keystore/
+node2/geth.ipc
+node2/transactions.rlp
+
+bothnode/geth/
+bothnode/keystore/
+bothnode/geth.ipc
+bothnode/transactions.rlp
+
+# Пароли и ключи
+password.txt
+*.key
+*.pem
+*.pfx
+*.crt
+
+# Логи
+*.log
+logs/
+debug.log
+
+# OS/system
+.DS_Store
+Thumbs.db
+
+# VSCode / IDE
+.vscode/
+.idea/
+
+# Backups / temp
+*.bak
+*.tmp
+*.swp
+*.swo
+
+# Lock files
+*.lock
+
+# Env (если используешь для нод)
+.env
