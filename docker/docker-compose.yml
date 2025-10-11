@@ -1,0 +1,54 @@
+# docker/docker-compose.yml  (FIX)
+version: "3.8"
+services:
+  bootnode:
+    image: ethereum/client-go:v1.13.11
+    command: ["bootnode","-nodekey","/data/boot.key","-addr",":30301"]
+    volumes: ["./node/bootnode:/data"]
+    ports: ["30301:30301/udp","30301:30301/tcp"]
+
+  validator1:
+    image: ethereum/client-go:v1.13.11
+    volumes: ["./node/validator1:/data","./configs:/app/configs","./configs/static-nodes.json:/data/geth/static-nodes.json"]
+    command:
+      [
+        "geth",
+        "--config","/app/configs/validator1.toml",
+        "--syncmode","full",
+        "--networkid","23251",
+        "--nat","none",
+        "--mine","--miner.threads","1",
+        "--http","--http.api","eth,net,web3,txpool",
+        "--ws","--ws.api","eth,net,web3,txpool"
+      ]
+    ports: ["8545:8545","8546:8546","30303:30303"]
+
+  validator2:
+    image: ethereum/client-go:v1.13.11
+    volumes: ["./node/validator2:/data","./configs:/app/configs","./configs/static-nodes.json:/data/geth/static-nodes.json"]
+    command:
+      [
+        "geth",
+        "--config","/app/configs/validator2.toml",
+        "--syncmode","full",
+        "--networkid","23251",
+        "--nat","none",
+        "--mine","--miner.threads","1",
+        "--http","--http.api","eth,net,web3,txpool",
+        "--ws","--ws.api","eth,net,web3,txpool"
+      ]
+    ports: ["8547:8547","8548:8548","30305:30305"]
+
+  rpc:
+    image: ethereum/client-go:v1.13.11
+    volumes: ["./node/rpc:/data","./configs:/app/configs","./configs/static-nodes.json:/data/geth/static-nodes.json"]
+    command:
+      [
+        "geth",
+        "--config","/app/configs/rpc.toml",
+        "--syncmode","full",
+        "--networkid","23251",
+        "--nat","none",
+        "--http","--ws"
+      ]
+    ports: ["8551:8551","8552:8552","30307:30307"]

@@ -1,0 +1,18 @@
+# configs/validator2.toml 
+[Node]
+DataDir = "node/validator2"
+HTTPHost = "127.0.0.1"
+HTTPPort = 8547
+HTTPModules = ["eth","net","web3","txpool"]
+WSPort = 8548
+WSModules = ["eth","net","web3","txpool"]
+IPCPath = "geth.ipc"
+NoUSB = true
+
+[P2P]
+ListenAddr = ":30305"
+MaxPeers = 50
+NoDiscovery = false
+
+[Miner]
+Etherbase = ""   # скрипт подставит адрес

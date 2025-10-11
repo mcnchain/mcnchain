@@ -1,0 +1,9 @@
+[Node]
+DataDir = "node/bootnode"
+IPCPath = "geth.ipc"
+NoUSB = true
+
+[P2P]
+ListenAddr = ":30301"
+MaxPeers = 64
+NoDiscovery = false

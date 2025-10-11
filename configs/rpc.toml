@@ -1,0 +1,14 @@
+[Node]
+DataDir = "node/rpc"
+HTTPHost = "0.0.0.0"
+HTTPPort = 8551
+HTTPModules = ["eth","net","web3","txpool","debug"]
+WSPort = 8552
+WSModules = ["eth","net","web3","txpool","debug"]
+IPCPath = "geth.ipc"
+NoUSB = true
+
+[P2P]
+ListenAddr = ":30307"
+MaxPeers = 100
+NoDiscovery = false

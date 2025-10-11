@@ -1,0 +1,4 @@
+FROM ethereum/client-go:v1.13.11
+WORKDIR /app
+COPY configs ./configs
+COPY scripts ./scripts
