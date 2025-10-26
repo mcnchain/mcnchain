@@ -1,12 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
-mkdir -p node/validator1 node/validator2
-echo "${PASSWORD_VAL1:-pass123}" > node/validator1/password.txt
-echo "${PASSWORD_VAL2:-pass123}" > node/validator2/password.txt
 
-ADDR1=$(geth account new --datadir node/validator1 --password node/validator1/password.txt | awk '/Public address/ {print $4}')
-ADDR2=$(geth account new --datadir node/validator2 --password node/validator2/password.txt | awk '/Public address/ {print $4}')
-echo -n "$ADDR1" > node/validator1/address.txt
-echo -n "$ADDR2" > node/validator2/address.txt
-echo "VAL1=$ADDR1"
-echo "VAL2=$ADDR2"
+DATADIR="${DATADIR:-./data/validator1}"
+PASSWORD_FILE="${PASSWORD_FILE:-./password.txt}"
+
+mkdir -p "$DATADIR"
+touch "$PASSWORD_FILE"
+
+echo "Creating new account in $DATADIR ..."
+ADDR_RAW="$(geth account new --datadir "$DATADIR" --password "$PASSWORD_FILE" 2>&1 | tee /dev/stderr)"
+# On success geth prints: "Address: {0xABC...}"
+ADDR="$(printf '%s\n' "$ADDR_RAW" | grep -oE 'Address:[[:space:]]*\{0x[0-9a-fA-F]+\}' | grep -oE '0x[0-9a-fA-F]+')"
+
+if [[ -z "${ADDR:-}" ]]; then
+  # Fallback: list keystore and pick the newest
+  ADDR="$(geth account list --datadir "$DATADIR" | awk -F'[{}]' '/Address/{print "0x"$2}' | tail -n1)"
+fi
+
+if [[ -z "${ADDR:-}" ]]; then
+  echo "Failed to obtain account address"; exit 1
+fi
+
+echo "$ADDR" > "$DATADIR/.coinbase"
+echo "Coinbase: $ADDR"
