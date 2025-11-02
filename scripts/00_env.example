@@ -1,0 +1,32 @@
+# NETWORK: mainnet | testnet
+NETWORK=mainnet
+CHAIN_ID=2325
+
+# Порты
+BOOTNODE_PORT=30301
+HTTP_PORT=8545
+WS_PORT=8546
+
+# Директории
+DATA_DIR=./data
+BOOTNODE_DIR=${DATA_DIR}/bootnode
+VALIDATOR_DIR=${DATA_DIR}/validator1
+KEYSTORE_DIR=${VALIDATOR_DIR}/keystore
+COINBASE_PASSWORD_FILE=${VALIDATOR_DIR}/password.txt
+COINBASE_FILE=${VALIDATOR_DIR}/.coinbase
+
+# RPC-хардениг
+HTTP_ADDR=127.0.0.1
+HTTP_APIS=eth,net,web3
+HTTP_CORS=              # пусто -> запрещено (внешний доступ через Nginx/mTLS)
+WS_ENABLE=false         # по умолчанию выключено
+WS_ADDR=127.0.0.1
+WS_ORIGINS=
+
+# Пиры / Bootnodes
+BOOTNODES=              # enode://…@host:port[,enode://…]
+STATIC_PEERS_FILE=./networks/${NETWORK}/static-peers.txt
+
+# Geth
+GETH_BIN=geth
+NETWORK_ID=${CHAIN_ID}
