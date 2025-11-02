@@ -1,25 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
+source "$(dirname "$0")/common.sh"
 
-DATADIR="${DATADIR:-./data/validator1}"
-PASSWORD_FILE="${PASSWORD_FILE:-./password.txt}"
+ensure_dir "$KEYSTORE_DIR"
+ensure_password_file "$COINBASE_PASSWORD_FILE"
+chmod_700 "$VALIDATOR_DIR" "$KEYSTORE_DIR"
 
-mkdir -p "$DATADIR"
-touch "$PASSWORD_FILE"
+if [[ -s "$COINBASE_FILE" ]]; then
+  ylw "Уже есть ${COINBASE_FILE}, пропускаем создание аккаунта."
+else
+  grn "Создаю новый аккаунт валидатора (без пустых паролей)…"
+  "$GETH_BIN" account new \
+    --datadir "$VALIDATOR_DIR" \
+    --keystore "$KEYSTORE_DIR" \
+    --password "$COINBASE_PASSWORD_FILE" >/dev/null
 
-echo "Creating new account in $DATADIR ..."
-ADDR_RAW="$(geth account new --datadir "$DATADIR" --password "$PASSWORD_FILE" 2>&1 | tee /dev/stderr)"
-# On success geth prints: "Address: {0xABC...}"
-ADDR="$(printf '%s\n' "$ADDR_RAW" | grep -oE 'Address:[[:space:]]*\{0x[0-9a-fA-F]+\}' | grep -oE '0x[0-9a-fA-F]+')"
-
-if [[ -z "${ADDR:-}" ]]; then
-  # Fallback: list keystore and pick the newest
-  ADDR="$(geth account list --datadir "$DATADIR" | awk -F'[{}]' '/Address/{print "0x"$2}' | tail -n1)"
+  COINBASE_ADDR="$(get_coinbase_addr "$KEYSTORE_DIR")"
+  echo "$COINBASE_ADDR" > "$COINBASE_FILE"
+  chmod_600 "$COINBASE_FILE"
+  grn "Готово. Coinbase: $COINBASE_ADDR"
 fi
-
-if [[ -z "${ADDR:-}" ]]; then
-  echo "Failed to obtain account address"; exit 1
-fi
-
-echo "$ADDR" > "$DATADIR/.coinbase"
-echo "Coinbase: $ADDR"
